@@ -3,8 +3,9 @@
 -- Run this in Supabase SQL Editor
 -- ============================================================
 
--- Enable UUID extension
+-- Enable required extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS btree_gist;
 
 -- ============================================================
 -- TABLES
@@ -186,7 +187,3 @@ BEGIN
 END;
 $$;
 
--- ============================================================
--- Enable the btree_gist extension for the EXCLUDE constraint
--- ============================================================
-CREATE EXTENSION IF NOT EXISTS btree_gist;

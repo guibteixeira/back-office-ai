@@ -133,15 +133,15 @@ export default function OnboardingPage() {
       .maybeSingle()
 
     if (existing) {
-      await supabase.from('professionals').update({
+      const { error } = await supabase.from('professionals').update({
         name: data.name,
         phone: data.phone,
         profession: data.profession,
       }).eq('id', user.id)
+      if (error) { toast.error('Erro ao salvar perfil.'); setLoading(false); return }
       setProfessionalId(user.id)
     } else {
-      // Slug will be set in next step; use temp slug
-      await supabase.from('professionals').insert({
+      const { error } = await supabase.from('professionals').insert({
         id: user.id,
         name: data.name,
         email: user.email!,
@@ -149,6 +149,7 @@ export default function OnboardingPage() {
         profession: data.profession,
         slug: `temp-${user.id.substring(0, 8)}`,
       })
+      if (error) { toast.error('Erro ao salvar perfil.'); setLoading(false); return }
       setProfessionalId(user.id)
     }
     setLoading(false)
@@ -164,7 +165,8 @@ export default function OnboardingPage() {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
-    await supabase.from('professionals').update({ slug: data.slug }).eq('id', user.id)
+    const { error } = await supabase.from('professionals').update({ slug: data.slug }).eq('id', user.id)
+    if (error) { toast.error('Erro ao salvar link.'); setLoading(false); return }
     setLoading(false)
     setStep(2)
   }

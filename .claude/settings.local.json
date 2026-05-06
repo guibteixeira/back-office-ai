@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(npm run:*)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(grep -E \"\\\\.\\(config|rc|mjs|json\\)$\")",
+      "Bash(tree -L 3 /home/alexjununo/estudos/services/back-office-ai --charset ascii -I 'node_modules|.next|.git' -o /tmp/tree_output.txt)",
+      "Read(//tmp/**)",
+      "Bash(vercel --version)"
     ]
   }
 }

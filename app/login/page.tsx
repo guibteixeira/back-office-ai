@@ -1,43 +1,55 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { CalendarDays, Loader2 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { CalendarDays, Loader2 } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface LoginForm {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>()
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>();
 
   async function onSubmit(data: LoginForm) {
-    setLoading(true)
-    const supabase = createClient()
+    setLoading(true);
+    const supabase = createClient();
     const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
-    })
+    });
 
     if (error) {
-      toast.error('Email ou senha incorretos.')
-      setLoading(false)
-      return
+      console.error("Erro ao fazer login:", error);
+      toast.error("Email ou senha incorretos.");
+      setLoading(false);
+      return;
     }
 
-    router.push('/dashboard/agenda')
-    router.refresh()
+    router.push("/dashboard/agenda");
+    router.refresh();
   }
 
   return (
@@ -64,10 +76,12 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   placeholder="seu@email.com"
-                  {...register('email', { required: 'Email obrigatório' })}
+                  {...register("email", { required: "Email obrigatório" })}
                 />
                 {errors.email && (
-                  <p className="text-xs text-destructive">{errors.email.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
 
@@ -77,10 +91,12 @@ export default function LoginPage() {
                   id="password"
                   type="password"
                   placeholder="••••••••"
-                  {...register('password', { required: 'Senha obrigatória' })}
+                  {...register("password", { required: "Senha obrigatória" })}
                 />
                 {errors.password && (
-                  <p className="text-xs text-destructive">{errors.password.message}</p>
+                  <p className="text-xs text-destructive">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
             </CardContent>
@@ -91,8 +107,11 @@ export default function LoginPage() {
                 Entrar
               </Button>
               <p className="text-sm text-muted-foreground text-center">
-                Não tem conta?{' '}
-                <Link href="/signup" className="text-primary font-medium hover:underline">
+                Não tem conta?{" "}
+                <Link
+                  href="/signup"
+                  className="text-primary font-medium hover:underline"
+                >
                   Criar conta grátis
                 </Link>
               </p>
@@ -101,5 +120,5 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
